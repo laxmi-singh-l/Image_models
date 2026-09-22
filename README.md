@@ -13,6 +13,43 @@ Each folder ships a standalone `infer.py` that downloads its pre-trained
 weights on first use, plus a `theory.txt` explaining how that family of
 models works.
 
+## About the models
+
+Four architectures, each representing a different generation of deep-learning
+super-resolution. They treat the task very differently and the result shows in
+the output:
+
+| Model | Family | How it works | Look & feel | Weak spot |
+|---|---|---|---|---|
+| **EDSR** | CNN | Single pass of convolutional filters; residual learning predicts only the missing high-frequency detail and adds it back. | Clean, smooth, noise-free | Can look slightly soft / blurry |
+| **Real-ESRGAN** | GAN | A Generator creates details while a Discriminator judges them against real photos; perceptual loss keeps realistic micro-texture. | Crisp, gritty, textured | Can "hallucinate" unnatural artifacts |
+| **Swin2SR** | Vision Transformer | The image is cut into patches (tokens); shifted-window self-attention models long-range relationships, then sub-pixel conv re-assembles them at high res. | Mathematically sharp, flawless edges | Heavier compute for large images |
+| **SD x4 Upscaler** | Diffusion | A U-Net iteratively denoises a noise canvas guided by the LR image over many steps. | Hyper-realistic, plausible novel detail | Slow; needs many steps |
+
+### In summary
+
+- **CNN** is the workhorse: fast, stable, trustworthy — good for medical/satellite
+  imagery and cleanup.
+- **GAN** adds texture punch, great for games, anime and compressed web art,
+  at the price of possible fake details.
+- **ViT** gives the cleanest geometry — ideal for text, architecture and
+  structured patterns.
+- **Diffusion** is the slowest but most "creative"; best for human faces and
+  photo restoration where realism beats speed.
+
+Deeper explainers and side-by-side comparisons live in each
+`<model>/theory.txt`.
+
+## Example output
+
+Upscaling `building.jpeg` at 4x with all four models produces a labelled grid
+(overview + zoomed-in center crop per model, bicubic as baseline):
+
+![4x comparison grid](results/comparison_x4.png)
+
+The same grid at 2x is written to `results/comparison_x2.png`. Every model's
+standalone output and the bicubic baseline are also saved under `results/`.
+
 ## Requirements
 
 Python 3.10+ and PyTorch (CUDA optional but recommended for speed).
