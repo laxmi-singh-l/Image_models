@@ -1,0 +1,35 @@
+To turn a low-resolution image into a super-resolution image using Vision Transformers (ViTs) like SwinIR or HAT, the system relies on self-attention mechanisms. Instead of looking at an image through small, isolated pixel clusters like older convolutional neural networks (CNNs) do, Transformers analyze how different parts of the entire image relate to one another to calculate missing details.
+Here is the step-by-step process of how Vision Transformers achieve super-resolution:
+## 1. Image Tokenisation (Patch Extraction)
+Because Transformers were originally designed for text, they cannot read a raw grid of pixels all at once.
+
+* The model divides the low-resolution image into a grid of small, non-overlapping squares called patches (the visual equivalent of words in a sentence).
+* These patches are flattened and converted into mathematical vectors (tokens) so the model can process them.
+
+## 2. The Shifting Window Attention (SwinIR Method)
+To avoid the massive computing power required to compare every single pixel to every other pixel in a massive image, models like SwinIR use a brilliant shortcut:
+
+* Local Windows: The model groups patches into local windows and calculates self-attention only within those boundaries to map out textures.
+* Shifted Windows: In the next layer, the model shifts the boundaries of these windows. This allows patches on the edges to "talk" to neighboring windows, capturing global context and ensuring edges remain flawlessly sharp without creating jarring seams or boundaries.
+
+## 3. Activating More Pixels (HAT Method)
+While SwinIR is incredibly precise, the Hybrid Attention Transformer (HAT) expands on this by combining the best of both worlds:
+
+* It pairs the broad, long-range understanding of Transformer self-attention with the dense, local pixel-gathering power of CNN channel attention.
+* This hybrid approach activates a much larger area of pixels across the input image, allowing the model to pull texture information from a wider context to reconstruct highly complex patterns.
+
+## 4. High-Resolution Reconstruction
+Once the Transformer layers have computed the relationship between all the image patches, a sub-pixel convolution layer takes these enriched tokens and projects them back into a continuous, upscaled pixel grid—delivering the final, crystal-clear output image.
+------------------------------
+## Direct Comparison: Vision Transformers (ViTs) vs. Diffusion Models
+
+| Feature | Vision Transformers (SwinIR / HAT) [3] | Diffusion Models (SR3) |
+|---|---|---|
+| Core Mechanism | Maps global relationships and pixel dependencies [3] | Generates details out of random noise guided by the original |
+| Output Type | Mathematically precise, flawless texture reconstruction [3] | Hyper-realistic, synthesised creative detail |
+| Processing Speed | Fast (processes the image in a single forward pass) | Slow (requires dozens or hundreds of iterative steps) |
+| Artifact Risk | Extremely low; creates perfectly clean, sharp edges [3] | Low, but can occasionally hallucinate fake details |
+| Best Used For | Text, architectural lines, pattern matching, scientific imagery | Human faces, skin textures, highly damaged photo restoration |
+
+Would you like to see a Python code example using Hugging Face to upscale an image with SwinIR, or would you prefer a list of available software applications that integrate these Transformer models?
+

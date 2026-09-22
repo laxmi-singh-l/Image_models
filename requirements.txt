@@ -1,0 +1,17 @@
+# Core (CUDA-enabled): install torch for your GPU first, e.g.
+#   pip install torch==2.7.1 torchvision --index-url https://download.pytorch.org/whl/cu126
+torch>=2.0
+torchvision
+
+# model libraries
+super-image>=0.2.0            # CNN: EDSR
+transformers>=4.40            # ViT: Swin2SR
+diffusers>=0.26               # Diffusion: SD x4 Upscaler
+accelerate
+safetensors
+huggingface_hub
+
+# image / math
+opencv-python
+pillow
+numpy
